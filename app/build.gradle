@@ -64,7 +64,7 @@ dependencies {
     implementation 'androidx.compose.ui:ui-graphics'
     implementation 'androidx.compose.ui:ui-tooling-preview'
     implementation 'androidx.compose.material3:material3'
-
+    implementation "androidx.navigation:navigation-compose:$rootProject.navVersion"
 
     implementation "com.google.dagger:hilt-android:$rootProject.hiltVersion"
     kapt "com.google.dagger:hilt-compiler:$rootProject.hiltVersion"

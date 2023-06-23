@@ -14,6 +14,7 @@ buildscript {
         hiltVersion = "2.45"
         hiltCompiler = "1.0.0"
         coilVersion = "2.4.0"
+        navVersion = "2.6.0"
 
         junitVersion = '4.13.2'
         testExtJunit = '1.1.5'
