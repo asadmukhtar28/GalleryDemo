@@ -11,14 +11,14 @@ import com.gallerydemo.R
 val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-        fontSize = 18.sp
+        fontSize = 22.sp
     ),
     bodyMedium = TextStyle(
         fontFamily = FontFamily(Font(R.font.poppins_medium)),
-        fontSize = 16.sp
+        fontSize = 20.sp
     ),
     bodySmall = TextStyle(
         fontFamily = FontFamily(Font(R.font.poppins_regular)),
-        fontSize = 14.sp
+        fontSize = 18.sp
     )
 )
