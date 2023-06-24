@@ -1,12 +1,6 @@
 package com.gallerydemo.ui.main
 
-import android.app.AlertDialog
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
@@ -21,22 +15,24 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.core.app.ActivityCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.gallerydemo.R
 import com.gallerydemo.ui.main.folder.GalleryFolderScreen
 import com.gallerydemo.ui.main.media.MediaListScreen
 import com.gallerydemo.ui.main.permission.PermissionComponent
 import com.gallerydemo.ui.theme.GalleryDemoTheme
 import com.gallerydemo.utils.getPermissionList
+import com.gallerydemo.utils.hasReadStoragePermission
+import com.gallerydemo.utils.isNeverAskPermissionSet
+import com.gallerydemo.utils.showPermissionSettingsConfirmationDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class GalleryActivity : ComponentActivity() {
     val viewModel: SharedViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
@@ -45,21 +41,13 @@ class GalleryActivity : ComponentActivity() {
             GalleryDemoTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
                     NavigationGraph()
                 }
             }
         }
     }
-
-    private fun isNeverAskPermissionSet(permission: String) =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            shouldShowRequestPermissionRationale(permission).not()
-        } else {
-            false
-        }
 
     @Composable
     fun NavigationGraph() {
@@ -70,18 +58,9 @@ class GalleryActivity : ComponentActivity() {
 
         val permissionLauncher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.RequestMultiplePermissions(),
-            onResult = { map ->
-                val isPermissionGranted = map.values.reduce { acc, value ->
-                    acc && value
-                }
-
-                if (isPermissionGranted) {
+            onResult = { permissions ->
+                onRequestResponseReceived(permissions) {
                     isReadStoragePermission = true
-                } else {
-                    val isNeverAskState = getPermissionList().any { isNeverAskPermissionSet(it) }
-                    if (isNeverAskState) {
-                        showPermissionSettingsConfirmationDialog()
-                    }
                 }
             }
         )
@@ -104,32 +83,22 @@ class GalleryActivity : ComponentActivity() {
         }
     }
 
-    private fun hasReadStoragePermission(): Boolean {
-        return getPermissionList().any {
-            ActivityCompat.checkSelfPermission(
-                this, it
-            ) == PackageManager.PERMISSION_GRANTED
+    private fun onRequestResponseReceived(
+        permissions: Map<String, @JvmSuppressWildcards Boolean>,
+        response: () -> Unit
+    ) {
+        val isPermissionGranted = permissions.values.reduce { acc, value ->
+            acc && value
+        }
+
+        if (isPermissionGranted) {
+            response.invoke()
+        } else {
+            val isNeverAskState = getPermissionList().any { isNeverAskPermissionSet(it) }
+            if (isNeverAskState) {
+                showPermissionSettingsConfirmationDialog()
+            }
         }
     }
 
-    private fun openPermissionSettings() {
-        val intent = Intent()
-        intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-        val uri = Uri.fromParts("package", packageName, null)
-        intent.data = uri
-        startActivity(intent)
-    }
-
-    private fun showPermissionSettingsConfirmationDialog() {
-        val alertDialog: AlertDialog.Builder = AlertDialog.Builder(this)
-            .setTitle(getString(R.string.app_name))
-            .setMessage("fragment.getString(R.string.message_open_permissions_setting)")
-            .setPositiveButton("R.string.settings") { dialog, _ ->
-                openPermissionSettings()
-                dialog.dismiss()
-            }
-            .setNegativeButton("R.string.cancel") { dialog, _ -> dialog.dismiss() }
-        alertDialog.setCancelable(false)
-        alertDialog.show()
-    }
 }
