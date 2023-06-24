@@ -51,7 +51,7 @@ fun MediaListScreen() {
 
 @Composable
 private fun MediaListToolbar(title: String = "All Images") {
-    Surface(shadowElevation = 2.dp) {
+    Surface(shadowElevation = 4.dp) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
