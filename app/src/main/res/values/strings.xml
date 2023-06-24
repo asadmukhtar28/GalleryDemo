@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">GalleryDemo</string>
     <string name="hello_world">Hello World</string>
+    <string name="gallery_permission">Gallery Permission</string>
+    <string name="gallery_permission_description">Please grant us access to your gallery so that we can display your media content here. This will enable us to showcase all the folders along with their respective images or videos.</string>
+    <string name="allow">Allow</string>
+    <string name="thumbnail">Thumbnail</string>
+    <string name="back">Back</string>
+    <string name="folders">Folders</string>
+    <string name="toggle_style">Toggle List Style</string>
+    <string name="settings">Settings</string>
+    <string name="cancel">Cancel</string>
+    <string name="message_open_permissions_setting">Please enable permissions from the settings.</string>
 </resources>
