@@ -80,7 +80,7 @@ dependencies {
     kapt "androidx.hilt:hilt-compiler:$rootProject.hiltCompiler"
     implementation "androidx.hilt:hilt-navigation-compose:$hiltCompiler"
 
-    implementation "io.coil-kt:coil:$rootProject.coilVersion"
+    implementation "io.coil-kt:coil-compose:$rootProject.coilVersion"
 
     testImplementation "junit:junit:$rootProject.junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$rootProject.testExtJunit"
