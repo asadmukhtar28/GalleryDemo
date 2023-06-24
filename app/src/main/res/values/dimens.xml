@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="permission_block_horizontal_padding">32dp</dimen>
+    <dimen name="permission_block_content_vertical_spacing">16dp</dimen>
+    <dimen name="linear_gallery_folder_parent_container_padding">16dp</dimen>
+    <dimen name="linear_gallery_folder_thumbnail_size">60dp</dimen>
+</resources>
