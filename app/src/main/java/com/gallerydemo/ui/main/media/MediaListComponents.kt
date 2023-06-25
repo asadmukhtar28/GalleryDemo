@@ -74,7 +74,10 @@ fun MediaListScreen(
 }
 
 @Composable
-private fun MediaListToolbar(title: String = "All Images", onBackIconClick: () -> Unit) {
+private fun MediaListToolbar(
+    title: String = stringResource(id = R.string.all_images),
+    onBackIconClick: () -> Unit
+) {
     Surface(shadowElevation = dimensionResource(id = R.dimen.toolbar_elevation)) {
         Row(
             modifier = Modifier
