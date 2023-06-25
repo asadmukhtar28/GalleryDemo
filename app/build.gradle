@@ -78,9 +78,10 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$rootProject.hiltVersion"
     kapt "com.google.dagger:hilt-compiler:$rootProject.hiltVersion"
     kapt "androidx.hilt:hilt-compiler:$rootProject.hiltCompiler"
-    implementation "androidx.hilt:hilt-navigation-compose:$hiltCompiler"
 
     implementation "io.coil-kt:coil-compose:$rootProject.coilVersion"
+    implementation "io.coil-kt:coil-video:$rootProject.coilVersion"
+
 
     testImplementation "junit:junit:$rootProject.junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$rootProject.testExtJunit"
