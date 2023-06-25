@@ -54,7 +54,7 @@ import com.gallerydemo.ui.theme.GalleryDemoTheme
 @Composable
 fun GalleryFolderScreen(
     galleryUiState: GalleryFolderUiState = GalleryFolderUiState(),
-    onItemClick: (folder: GalleryFolder) -> Unit
+    onItemClick: (folder: GalleryFolder) -> Unit,
 ) {
     var isLinearViewStyle by rememberSaveable {
         mutableStateOf(true)
@@ -149,13 +149,28 @@ private fun ItemLinearGalleryFolderView(folder: GalleryFolder, onItemClick: () -
         val mediaItem = folder.mediaList.firstOrNull()
         mediaItem?.let { media ->
             LoadThumbnail(mediaPath = media.mediaPath,
-                isVideo = media.isVideo, modifier = Modifier
+                isVideo = media.isVideo,
+                modifier = Modifier
                     .constrainAs(ivThumbnail) {
                         start.linkTo(parent.start)
                         top.linkTo(topMarginSpacer.bottom)
                     }
                     .size(dimensionResource(id = R.dimen.linear_gallery_folder_thumbnail_size))
-                    .clip(shape = RoundedCornerShape(8.dp)))
+                    .clip(shape = RoundedCornerShape(8.dp))
+            )
+        } ?: kotlin.run {
+            Image(painter = painterResource(id = R.drawable.ic_default_thumbnail),
+                contentDescription = stringResource(
+                    id = R.string.thumbnail
+                ),
+                modifier = Modifier
+                    .constrainAs(ivThumbnail) {
+                        start.linkTo(parent.start)
+                        top.linkTo(topMarginSpacer.bottom)
+                    }
+                    .size(dimensionResource(id = R.dimen.linear_gallery_folder_thumbnail_size))
+                    .clip(shape = RoundedCornerShape(8.dp))
+            )
         }
 
         Text(
@@ -190,7 +205,8 @@ private fun ItemLinearGalleryFolderView(folder: GalleryFolder, onItemClick: () -
 private fun ItemGridGalleryFolderView(
     folder: GalleryFolder = GalleryFolder(
         stringResource(id = R.string.all_images), arrayListOf()
-    ), onItemClick: () -> Unit
+    ),
+    onItemClick: () -> Unit,
 ) {
     ConstraintLayout(modifier = Modifier
         .fillMaxWidth()
@@ -201,7 +217,18 @@ private fun ItemGridGalleryFolderView(
         mediaItem?.let { media ->
             LoadThumbnail(
                 mediaPath = media.mediaPath,
-                isVideo = media.isVideo, modifier = Modifier
+                isVideo = media.isVideo,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f)
+            )
+        } ?: kotlin.run {
+            Image(
+                painter = painterResource(id = R.drawable.ic_default_thumbnail),
+                contentDescription = stringResource(
+                    id = R.string.thumbnail
+                ),
+                modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(1f)
             )
