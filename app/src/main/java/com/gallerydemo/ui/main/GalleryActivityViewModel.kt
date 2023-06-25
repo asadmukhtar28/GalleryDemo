@@ -3,7 +3,7 @@ package com.gallerydemo.ui.main
 import android.content.ContentResolver
 import androidx.lifecycle.viewModelScope
 import com.gallerydemo.data.local.models.GalleryFolder
-import com.gallerydemo.data.repository.GalleryRepositoryImpl
+import com.gallerydemo.data.repository.GalleryRepository
 import com.gallerydemo.ui.base.BaseViewModel
 import com.gallerydemo.ui.main.folder.GalleryFolderUiState
 import com.gallerydemo.utils.State
@@ -13,11 +13,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GalleryActivityViewModel @Inject constructor(private val repository: GalleryRepositoryImpl) :
+class GalleryActivityViewModel @Inject constructor(private val repository: GalleryRepository) :
     BaseViewModel() {
 
     private val _galleryUiState = MutableStateFlow(GalleryFolderUiState(isLoading = true))
@@ -41,21 +42,25 @@ class GalleryActivityViewModel @Inject constructor(private val repository: Galle
                     .collectLatest { response ->
                         when (response) {
                             is State.Failure -> {
-                                _galleryUiState.value = _galleryUiState.value.copy(
-                                    isLoading = false,
-                                    galleryFolderList = emptyList()
-                                )
+                                _galleryUiState.update { state ->
+                                    state.copy(
+                                        isLoading = false,
+                                        galleryFolderList = emptyList()
+                                    )
+                                }
                             }
 
                             State.Loading -> {
-                                _galleryUiState.value = _galleryUiState.value.copy(isLoading = true)
+                                _galleryUiState.update { state -> state.copy(isLoading = true) }
                             }
 
                             is State.Success -> {
-                                _galleryUiState.value = _galleryUiState.value.copy(
-                                    isLoading = false,
-                                    galleryFolderList = response.data
-                                )
+                                _galleryUiState.update { state ->
+                                    state.copy(
+                                        isLoading = false,
+                                        galleryFolderList = response.data
+                                    )
+                                }
                             }
                         }
                     }
