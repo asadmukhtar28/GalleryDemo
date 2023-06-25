@@ -38,6 +38,9 @@ class GalleryActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         installSplashScreen()
 
+        if (hasReadStoragePermission())
+            viewModel.fetchGallery(contentResolver, stringProvider = { resId -> getString(resId) })
+
         setContent {
             GalleryDemoTheme {
                 // A surface container using the 'background' color from the theme
