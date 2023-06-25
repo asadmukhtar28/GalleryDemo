@@ -30,15 +30,18 @@ class GalleryActivityViewModel @Inject constructor(private val repository: Galle
     val isPermissionGrantedFromSettings = _isPermissionGrantedFromSettings.asStateFlow()
 
 
+    /**
+     * As onConfiguration change fetchGallery() again called so before loading the data
+     * again, just check if data is loaded then return.
+     *
+     * isPermissionGrantedFromSettings used for handling the logic that if permission
+     * granted from settings then next screen will be opened.
+     * */
     fun fetchGallery(
         contentResolver: ContentResolver,
         stringProvider: (resId: Int) -> String,
         isPermissionGrantedFromSettings: Boolean = false
     ) {
-        /*
-        * As onConfiguration change fetchGallery() again called so before loading the data
-        * again, just check if data is loaded then return
-        */
         if (galleryUiState.value.galleryFolderList.isNotEmpty()
             || galleryUiState.value.isLoading
         )
@@ -76,10 +79,7 @@ class GalleryActivityViewModel @Inject constructor(private val repository: Galle
             }
         }
 
-        /*
-        * isPermissionGrantedFromSettings used for handling the logic that if permission
-        * granted from settings then next screen will be opened.
-        */
+
         if (isPermissionGrantedFromSettings) {
             _isPermissionGrantedFromSettings.value = true
         }
