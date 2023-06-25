@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">معرض الصور</string>
-    <string name="hello_world">مرحبا بالعالم</string>
     <string name="gallery_permission">إذن المعرض</string>
     <string name="gallery_permission_description">يرجى منحنا حق الوصول إلى معرض الصور الخاص بك حتى نتمكن من عرض محتوى الوسائط الخاص بك هنا. سيمكننا ذلك من عرض جميع المجلدات جنبًا إلى جنب مع الصور أو مقاطع الفيديو الخاصة بكل منها.</string>
     <string name="allow">يسمح</string>
