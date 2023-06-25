@@ -19,11 +19,13 @@ fun Activity.hasReadStoragePermission(): Boolean {
 }
 
 fun Activity.openPermissionSettings() {
-    val intent = Intent()
-    intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-    val uri = Uri.fromParts("package", packageName, null)
-    intent.data = uri
-    startActivity(intent)
+    Intent().apply {
+        action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+        val uri = Uri.fromParts("package", packageName, null)
+        data = uri
+    }.run {
+        startActivity(this)
+    }
 }
 
 fun Activity.showPermissionSettingsConfirmationDialog() {
