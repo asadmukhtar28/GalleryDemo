@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace 'com.gallerydemo'
-    compileSdk 33
+    compileSdk rootProject.ext.compileSdkVersion
 
     defaultConfig {
         applicationId "com.gallerydemo"
@@ -55,7 +55,6 @@ dependencies {
 
     implementation "androidx.core:core-ktx:$rootProject.coreKtxVersion"
     implementation platform("org.jetbrains.kotlin:kotlin-bom:$rootProject.kotlinBomVersion")
-
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$rootProject.lifecycleKtxVersion"
     implementation "androidx.activity:activity-compose:$rootProject.composeActivityVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.viewModelKtxVersion"
@@ -76,10 +75,12 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout-compose:$rootProject.constraintLayoutVersion"
     implementation "androidx.lifecycle:lifecycle-runtime-compose:$rootProject.composeLifeCycleVersion"
 
+    // hilt
     implementation "com.google.dagger:hilt-android:$rootProject.hiltVersion"
     kapt "com.google.dagger:hilt-compiler:$rootProject.hiltVersion"
     kapt "androidx.hilt:hilt-compiler:$rootProject.hiltCompiler"
 
+    // coil Image loading
     implementation "io.coil-kt:coil-compose:$rootProject.coilVersion"
     implementation "io.coil-kt:coil-video:$rootProject.coilVersion"
 
