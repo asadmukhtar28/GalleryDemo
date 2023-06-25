@@ -12,4 +12,6 @@
     <string name="cancel">Cancel</string>
     <string name="message_open_permissions_setting">Please navigate to the settings and enable the required permissions.</string>
     <string name="empty_media_list">There is no media available.</string>
+    <string name="all_images">All Images</string>
+    <string name="all_videos">All Videos</string>
 </resources>

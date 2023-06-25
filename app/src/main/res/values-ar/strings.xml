@@ -12,4 +12,6 @@
     <string name="cancel">إلغاء</string>
     <string name="message_open_permissions_setting">يرجى الانتقال إلى الإعدادات وتمكين الأذونات المطلوبة.</string>
     <string name="empty_media_list">لا توجد وسائط متاحة.</string>
+    <string name="all_images">جميع الصور</string>
+    <string name="all_videos">جميع مقاطع الفيديو</string>
 </resources>
