@@ -79,12 +79,6 @@ class GalleryActivity : ComponentActivity() {
                     }
                 })
 
-        if (isPermissionGrantedFromSettings) {
-            navController.navigate(
-                NavRoutes.FOLDERS_SCREEN,
-            )
-        }
-
         NavHost(
             navController = navController,
             startDestination = if (isReadStoragePermissionGranted) NavRoutes.FOLDERS_SCREEN else NavRoutes.PERMISSION_SCREEN
@@ -105,6 +99,12 @@ class GalleryActivity : ComponentActivity() {
             composable(NavRoutes.MEDIA_SCREEN) {
                 MediaListScreen(selectedGalleryFolder)
             }
+        }
+
+        if (isPermissionGrantedFromSettings) {
+            navController.navigate(
+                NavRoutes.FOLDERS_SCREEN,
+            )
         }
     }
 

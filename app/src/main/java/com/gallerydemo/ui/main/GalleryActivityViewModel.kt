@@ -20,7 +20,7 @@ import javax.inject.Inject
 class GalleryActivityViewModel @Inject constructor(private val repository: GalleryRepository) :
     ViewModel() {
 
-    private val _galleryUiState = MutableStateFlow(GalleryFolderUiState(isLoading = true))
+    private val _galleryUiState = MutableStateFlow(GalleryFolderUiState())
     val galleryUiState = _galleryUiState.asStateFlow()
 
     private val _selectedItemPosition = MutableStateFlow(GalleryFolder())
@@ -36,10 +36,20 @@ class GalleryActivityViewModel @Inject constructor(private val repository: Galle
         isPermissionGrantedFromSettings: Boolean = false
     ) {
         /*
+        * isPermissionGrantedFromSettings used for handling the logic that if permission
+        * granted from settings then next screen will be opened.
+        */
+        if (isPermissionGrantedFromSettings) {
+            _isPermissionGrantedFromSettings.value = true
+        }
+
+        /*
         * As onConfiguration change fetchGallery() again called so before loading the data
         * again, just check if data is loaded then return
         */
-        if (galleryUiState.value.galleryFolderList.isNotEmpty())
+        if (galleryUiState.value.galleryFolderList.isNotEmpty()
+            || galleryUiState.value.isLoading
+        )
             return
         else {
             viewModelScope.launch(Dispatchers.IO) {
@@ -72,9 +82,6 @@ class GalleryActivityViewModel @Inject constructor(private val repository: Galle
                         }
                     }
             }
-        }
-        if (isPermissionGrantedFromSettings) {
-            _isPermissionGrantedFromSettings.value = true
         }
     }
 
