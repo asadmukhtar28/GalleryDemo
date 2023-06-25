@@ -12,9 +12,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
@@ -38,8 +35,8 @@ class GalleryActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         installSplashScreen()
 
-        if (hasReadStoragePermission())
-            viewModel.fetchGallery(contentResolver, stringProvider = { resId -> getString(resId) })
+        if (hasReadStoragePermission()) viewModel.fetchGallery(contentResolver = contentResolver,
+            stringProvider = { resId -> getString(resId) })
 
         setContent {
             GalleryDemoTheme {
@@ -47,53 +44,62 @@ class GalleryActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    NavigationGraph()
+                    InitUi(hasReadStoragePermission())
                 }
             }
         }
     }
 
-    @Composable
-    fun NavigationGraph() {
-
-        var isReadStoragePermission by rememberSaveable {
-            mutableStateOf(hasReadStoragePermission())
-        }
-
-        val permissionLauncher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.RequestMultiplePermissions(),
-            onResult = { permissions ->
-                onRequestResponseReceived(permissions) {
-                    isReadStoragePermission = true
-                    viewModel.fetchGallery(contentResolver, stringProvider = { resId ->
-                        getString(resId)
-                    })
-                }
-            }
+    override fun onResume() {
+        super.onResume()
+        if (hasReadStoragePermission()) viewModel.fetchGallery(
+            contentResolver = contentResolver,
+            stringProvider = { resId -> getString(resId) },
+            isPermissionGrantedFromSettings = true
         )
+    }
 
-        val navController = rememberNavController()
-
+    @Composable
+    fun InitUi(isReadStoragePermissionGranted: Boolean) {
         val galleryUiState by viewModel.galleryUiState.collectAsState()
         val selectedGalleryFolder by viewModel.selectedItemPosition.collectAsState()
+        val isPermissionGrantedFromSettings by viewModel.isPermissionGrantedFromSettings.collectAsState()
+        val navController = rememberNavController()
+
+        val permissionLauncher =
+            rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestMultiplePermissions(),
+                onResult = { permissions ->
+                    onRequestResponseReceived(permissions) {
+                        navController.navigate(
+                            NavRoutes.FOLDERS_SCREEN,
+                        )
+                        viewModel.fetchGallery(contentResolver, stringProvider = { resId ->
+                            getString(resId)
+                        })
+                    }
+                })
+
+        if (isPermissionGrantedFromSettings) {
+            navController.navigate(
+                NavRoutes.FOLDERS_SCREEN,
+            )
+        }
 
         NavHost(
             navController = navController,
-            startDestination = if (isReadStoragePermission) NavRoutes.FOLDERS_SCREEN else NavRoutes.PERMISSION_SCREEN
+            startDestination = if (isReadStoragePermissionGranted) NavRoutes.FOLDERS_SCREEN else NavRoutes.PERMISSION_SCREEN
         ) {
             composable(NavRoutes.PERMISSION_SCREEN) {
                 PermissionComponent { permissionLauncher.launch(getPermissionList()) }
             }
 
             composable(NavRoutes.FOLDERS_SCREEN) {
-                GalleryFolderScreen(
-                    galleryUiState = galleryUiState,
-                    onItemClick = { folder ->
-                        viewModel.setSelectedGalleryFolderItem(folder)
-                        navController.navigate(
-                            NavRoutes.MEDIA_SCREEN,
-                        )
-                    })
+                GalleryFolderScreen(galleryUiState = galleryUiState, onItemClick = { folder ->
+                    navController.navigate(
+                        NavRoutes.MEDIA_SCREEN,
+                    )
+                    viewModel.setSelectedGalleryFolderItem(folder)
+                })
             }
 
             composable(NavRoutes.MEDIA_SCREEN) {
@@ -103,8 +109,7 @@ class GalleryActivity : ComponentActivity() {
     }
 
     private fun onRequestResponseReceived(
-        permissions: Map<String, @JvmSuppressWildcards Boolean>,
-        response: () -> Unit
+        permissions: Map<String, @JvmSuppressWildcards Boolean>, response: () -> Unit
     ) {
         val isPermissionGranted = permissions.values.reduce { acc, value ->
             acc && value

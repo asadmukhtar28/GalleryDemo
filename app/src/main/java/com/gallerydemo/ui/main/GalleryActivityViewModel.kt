@@ -10,7 +10,6 @@ import com.gallerydemo.utils.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
@@ -22,19 +21,27 @@ class GalleryActivityViewModel @Inject constructor(private val repository: Galle
     ViewModel() {
 
     private val _galleryUiState = MutableStateFlow(GalleryFolderUiState(isLoading = true))
-    val galleryUiState: StateFlow<GalleryFolderUiState> = _galleryUiState.asStateFlow()
+    val galleryUiState = _galleryUiState.asStateFlow()
 
     private val _selectedItemPosition = MutableStateFlow(GalleryFolder())
-    val selectedItemPosition: StateFlow<GalleryFolder> = _selectedItemPosition
+    val selectedItemPosition = _selectedItemPosition.asStateFlow()
 
-    fun fetchGallery(contentResolver: ContentResolver, stringProvider: (resId: Int) -> String) {
+    private val _isPermissionGrantedFromSettings = MutableStateFlow(false)
+    val isPermissionGrantedFromSettings = _isPermissionGrantedFromSettings.asStateFlow()
+
+
+    fun fetchGallery(
+        contentResolver: ContentResolver,
+        stringProvider: (resId: Int) -> String,
+        isPermissionGrantedFromSettings: Boolean = false
+    ) {
         /*
-        * As on Configuration change fetchGallery() again called so before loading the data
+        * As onConfiguration change fetchGallery() again called so before loading the data
         * again, just check if data is loaded then return
         */
         if (galleryUiState.value.galleryFolderList.isNotEmpty())
             return
-        else
+        else {
             viewModelScope.launch(Dispatchers.IO) {
                 repository.loadMediaFromStorage(
                     contentResolver,
@@ -65,6 +72,10 @@ class GalleryActivityViewModel @Inject constructor(private val repository: Galle
                         }
                     }
             }
+        }
+        if (isPermissionGrantedFromSettings) {
+            _isPermissionGrantedFromSettings.value = true
+        }
     }
 
     fun setSelectedGalleryFolderItem(folder: GalleryFolder) {
