@@ -10,12 +10,21 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import coil.ImageLoader
+import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.decode.VideoFrameDecoder
+import coil.request.CachePolicy
 import com.gallerydemo.R
 
 
@@ -43,5 +52,46 @@ fun EmptyComponent() {
                 style = MaterialTheme.typography.bodyLarge
             )
         }
+    }
+}
+
+@Composable
+fun LoadThumbnail(mediaPath: String, isVideo: Boolean, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    if (isVideo) {
+        val imageLoader = remember {
+            ImageLoader.Builder(context).memoryCachePolicy(CachePolicy.ENABLED)
+                .diskCachePolicy(CachePolicy.ENABLED).respectCacheHeaders(true)
+                .components { add(VideoFrameDecoder.Factory()) }.crossfade(true).build()
+        }
+        val painter = rememberAsyncImagePainter(
+            model = mediaPath,
+            imageLoader = imageLoader,
+        )
+
+        if (painter.state is AsyncImagePainter.State.Loading) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_default_thumbnail),
+                contentDescription = null,
+                modifier = modifier,
+                contentScale = ContentScale.Crop,
+            )
+        }
+
+        Image(
+            painter = painter,
+            contentDescription = stringResource(id = R.string.thumbnail),
+            contentScale = ContentScale.Crop,
+            modifier = modifier
+        )
+    } else {
+        AsyncImage(
+            model = mediaPath,
+            contentDescription = stringResource(id = R.string.thumbnail),
+            modifier = modifier,
+            contentScale = ContentScale.Crop,
+            placeholder = painterResource(id = R.drawable.ic_default_thumbnail),
+            error = painterResource(id = R.drawable.ic_default_thumbnail)
+        )
     }
 }
