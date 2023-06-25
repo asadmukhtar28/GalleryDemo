@@ -20,7 +20,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.gallerydemo.R
 import com.gallerydemo.ui.theme.GalleryDemoTheme
 
-
 @Composable
 fun PermissionComponent(onAllowButtonClick: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
@@ -60,7 +59,7 @@ fun PermissionComponent(onAllowButtonClick: () -> Unit) {
 
 @Preview(showBackground = true)
 @Composable
-private fun PermissionScreenPreview() {
+private fun PermissionComponentPreview() {
     GalleryDemoTheme {
         // A surface container using the 'background' color from the theme
         Surface(
