@@ -20,29 +20,21 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import coil.ImageLoader
-import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
-import coil.compose.rememberAsyncImagePainter
-import coil.decode.VideoFrameDecoder
-import coil.request.CachePolicy
 import com.gallerydemo.R
 import com.gallerydemo.data.local.models.GalleryFolder
 import com.gallerydemo.data.local.models.MediaItem
 import com.gallerydemo.ui.main.common.EmptyComponent
+import com.gallerydemo.ui.main.common.LoadThumbnail
 import com.gallerydemo.ui.theme.GalleryDemoTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -102,52 +94,12 @@ private fun MediaListToolbar(title: String = "All Images") {
 fun ItemMediaView(media: MediaItem) {
 
     Box(modifier = Modifier.fillMaxWidth()) {
-        val context = LocalContext.current
-        if (media.isVideo) {
-            val imageLoader = remember {
-                ImageLoader.Builder(context)
-                    .memoryCachePolicy(CachePolicy.ENABLED)
-                    .diskCachePolicy(CachePolicy.ENABLED)
-                    .components { add(VideoFrameDecoder.Factory()) }.crossfade(true)
-                    .build()
-            }
-            val painter = rememberAsyncImagePainter(
-                model = media.mediaPath,
-                imageLoader = imageLoader,
-            )
-
-            if (painter.state is AsyncImagePainter.State.Loading) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_default_thumbnail),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1f),
-                    contentScale = ContentScale.Crop,
-                )
-            }
-
-            Image(
-                painter = painter,
-                contentDescription = stringResource(id = R.string.thumbnail),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1f)
-            )
-
-        } else {
-            AsyncImage(
-                model = media.mediaPath,
-                contentDescription = stringResource(id = R.string.thumbnail),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1f),
-                contentScale = ContentScale.Crop,
-                placeholder = painterResource(id = R.drawable.ic_default_thumbnail),
-                error = painterResource(id = R.drawable.ic_default_thumbnail)
-            )
-        }
+        LoadThumbnail(
+            mediaPath = media.mediaPath,
+            isVideo = media.isVideo, modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1f)
+        )
 
         if (media.isVideo) {
             Box(
