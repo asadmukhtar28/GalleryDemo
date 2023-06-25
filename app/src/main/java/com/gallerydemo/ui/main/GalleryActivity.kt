@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -31,7 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class GalleryActivity : ComponentActivity() {
-    val viewModel: SharedViewModel by viewModels()
+    private val viewModel: GalleryActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,11 +62,17 @@ class GalleryActivity : ComponentActivity() {
             onResult = { permissions ->
                 onRequestResponseReceived(permissions) {
                     isReadStoragePermission = true
+                    viewModel.fetchGallery(contentResolver, stringProvider = { resId ->
+                        getString(resId)
+                    })
                 }
             }
         )
 
         val navController = rememberNavController()
+
+        val galleryUiState by viewModel.galleryUiState.collectAsState()
+        val selectedGalleryFolder by viewModel.selectedItemPosition.collectAsState()
 
         NavHost(
             navController = navController,
@@ -74,11 +81,20 @@ class GalleryActivity : ComponentActivity() {
             composable(NavRoutes.PERMISSION_SCREEN) {
                 PermissionComponent { permissionLauncher.launch(getPermissionList()) }
             }
+
             composable(NavRoutes.FOLDERS_SCREEN) {
-                GalleryFolderScreen()
+                GalleryFolderScreen(
+                    galleryUiState = galleryUiState,
+                    onItemClick = { folder ->
+                        viewModel.setSelectedGalleryFolderItem(folder)
+                        navController.navigate(
+                            NavRoutes.MEDIA_SCREEN,
+                        )
+                    })
             }
+
             composable(NavRoutes.MEDIA_SCREEN) {
-                MediaListScreen()
+                MediaListScreen(selectedGalleryFolder)
             }
         }
     }
