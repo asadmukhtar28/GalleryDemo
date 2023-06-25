@@ -10,9 +10,8 @@ import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import com.gallerydemo.R
 
-
 fun Activity.hasReadStoragePermission(): Boolean {
-    return getPermissionList().any {
+    return PermissionHelper.getPermissionList().any {
         ActivityCompat.checkSelfPermission(
             this, it
         ) == PackageManager.PERMISSION_GRANTED
