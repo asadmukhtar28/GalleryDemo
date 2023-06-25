@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -43,7 +44,7 @@ fun EmptyComponent() {
                 contentDescription = stringResource(
                     id = R.string.thumbnail
                 ),
-                modifier = Modifier.size(150.dp)
+                modifier = Modifier.size(dimensionResource(id = R.dimen.empty_gallery_icon_size))
             )
 
             Text(
