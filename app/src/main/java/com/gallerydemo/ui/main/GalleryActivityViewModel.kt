@@ -1,10 +1,10 @@
 package com.gallerydemo.ui.main
 
 import android.content.ContentResolver
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gallerydemo.data.local.models.GalleryFolder
 import com.gallerydemo.data.repository.GalleryRepository
-import com.gallerydemo.ui.base.BaseViewModel
 import com.gallerydemo.ui.main.folder.GalleryFolderUiState
 import com.gallerydemo.utils.State
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GalleryActivityViewModel @Inject constructor(private val repository: GalleryRepository) :
-    BaseViewModel() {
+    ViewModel() {
 
     private val _galleryUiState = MutableStateFlow(GalleryFolderUiState(isLoading = true))
     val galleryUiState: StateFlow<GalleryFolderUiState> = _galleryUiState.asStateFlow()
