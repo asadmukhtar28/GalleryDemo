@@ -21,7 +21,7 @@ import com.gallerydemo.ui.main.folder.GalleryFolderScreen
 import com.gallerydemo.ui.main.media.MediaListScreen
 import com.gallerydemo.ui.main.permission.PermissionComponent
 import com.gallerydemo.ui.theme.GalleryDemoTheme
-import com.gallerydemo.utils.getPermissionList
+import com.gallerydemo.utils.PermissionHelper
 import com.gallerydemo.utils.hasReadStoragePermission
 import com.gallerydemo.utils.isNeverAskPermissionSet
 import com.gallerydemo.utils.showPermissionSettingsConfirmationDialog
@@ -34,7 +34,7 @@ class GalleryActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
-        checkPermissionAndMakeCall()
+        checkPermissionAndFetchGallery()
         setContent {
             GalleryDemoTheme {
                 // A surface container using the 'background' color from the theme
@@ -47,17 +47,17 @@ class GalleryActivity : ComponentActivity() {
         }
     }
 
-    private fun checkPermissionAndMakeCall(isFromOnResume: Boolean = false) {
+    override fun onResume() {
+        super.onResume()
+        checkPermissionAndFetchGallery(true)
+    }
+
+    private fun checkPermissionAndFetchGallery(isFromOnResume: Boolean = false) {
         if (hasReadStoragePermission()) viewModel.fetchGallery(
             contentResolver = contentResolver,
             stringProvider = { resId -> getString(resId) },
             isPermissionGrantedFromSettings = isFromOnResume
         )
-    }
-
-    override fun onResume() {
-        super.onResume()
-        checkPermissionAndMakeCall(true)
     }
 
     @Composable
@@ -86,7 +86,9 @@ class GalleryActivity : ComponentActivity() {
             startDestination = if (isReadStoragePermissionGranted) NavRoutes.FOLDERS_SCREEN else NavRoutes.PERMISSION_SCREEN
         ) {
             composable(NavRoutes.PERMISSION_SCREEN) {
-                PermissionComponent { permissionLauncher.launch(getPermissionList()) }
+                PermissionComponent {
+                    permissionLauncher.launch(PermissionHelper.getPermissionList())
+                }
             }
 
             composable(NavRoutes.FOLDERS_SCREEN) {
@@ -99,7 +101,9 @@ class GalleryActivity : ComponentActivity() {
             }
 
             composable(NavRoutes.MEDIA_SCREEN) {
-                MediaListScreen(selectedGalleryFolder)
+                MediaListScreen(selectedGalleryFolder) {
+                    navController.popBackStack()
+                }
             }
         }
 
@@ -120,7 +124,8 @@ class GalleryActivity : ComponentActivity() {
         if (isPermissionGranted) {
             response.invoke()
         } else {
-            val isNeverAskState = getPermissionList().any { isNeverAskPermissionSet(it) }
+            val isNeverAskState =
+                PermissionHelper.getPermissionList().any { isNeverAskPermissionSet(it) }
             if (isNeverAskState) {
                 showPermissionSettingsConfirmationDialog()
             }
