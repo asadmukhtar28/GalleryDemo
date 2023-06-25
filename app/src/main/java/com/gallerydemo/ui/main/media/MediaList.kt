@@ -2,6 +2,7 @@ package com.gallerydemo.ui.main.media
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -40,10 +41,17 @@ import com.gallerydemo.ui.theme.GalleryDemoTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MediaListScreen(galleryFolder: GalleryFolder = GalleryFolder()) {
+fun MediaListScreen(
+    galleryFolder: GalleryFolder = GalleryFolder(),
+    onBackIconClick: (() -> Unit)? = null
+) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { MediaListToolbar(galleryFolder.title ?: "") }) { innerPadding ->
+        topBar = {
+            MediaListToolbar(galleryFolder.title ?: "") {
+                onBackIconClick?.invoke()
+            }
+        }) { innerPadding ->
 
         when {
             galleryFolder.mediaList.size > 0 -> {
@@ -66,7 +74,7 @@ fun MediaListScreen(galleryFolder: GalleryFolder = GalleryFolder()) {
 }
 
 @Composable
-private fun MediaListToolbar(title: String = "All Images") {
+private fun MediaListToolbar(title: String = "All Images", onBackIconClick: () -> Unit) {
     Surface(shadowElevation = dimensionResource(id = R.dimen.toolbar_elevation)) {
         Row(
             modifier = Modifier
@@ -79,7 +87,7 @@ private fun MediaListToolbar(title: String = "All Images") {
                 painter = painterResource(id = R.drawable.ic_back),
                 contentDescription = stringResource(
                     R.string.back
-                )
+                ), modifier = Modifier.clickable { onBackIconClick.invoke() }
             )
 
             Text(
