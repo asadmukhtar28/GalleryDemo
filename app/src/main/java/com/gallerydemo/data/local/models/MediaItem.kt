@@ -6,7 +6,6 @@ data class MediaItem(
     val mediaWidth: Int,
     val mediaHeight: Int,
     val mediaSize: Long,
-    val mimeType: String
-) {
-    val isVideo: Boolean = mimeType.startsWith("video", true)
-}
+    val mimeType: String,
+    val isVideo: Boolean = mimeType.startsWith("video", true),
+)
