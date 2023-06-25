@@ -36,14 +36,6 @@ class GalleryActivityViewModel @Inject constructor(private val repository: Galle
         isPermissionGrantedFromSettings: Boolean = false
     ) {
         /*
-        * isPermissionGrantedFromSettings used for handling the logic that if permission
-        * granted from settings then next screen will be opened.
-        */
-        if (isPermissionGrantedFromSettings) {
-            _isPermissionGrantedFromSettings.value = true
-        }
-
-        /*
         * As onConfiguration change fetchGallery() again called so before loading the data
         * again, just check if data is loaded then return
         */
@@ -82,6 +74,14 @@ class GalleryActivityViewModel @Inject constructor(private val repository: Galle
                         }
                     }
             }
+        }
+
+        /*
+        * isPermissionGrantedFromSettings used for handling the logic that if permission
+        * granted from settings then next screen will be opened.
+        */
+        if (isPermissionGrantedFromSettings) {
+            _isPermissionGrantedFromSettings.value = true
         }
     }
 

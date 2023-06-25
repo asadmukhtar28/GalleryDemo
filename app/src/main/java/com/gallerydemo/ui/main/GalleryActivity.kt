@@ -10,10 +10,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -61,13 +61,14 @@ class GalleryActivity : ComponentActivity() {
 
     @Composable
     fun InitUi(isReadStoragePermissionGranted: Boolean) {
-        val galleryUiState by viewModel.galleryUiState.collectAsState()
-        val selectedGalleryFolder by viewModel.selectedItemPosition.collectAsState()
-        val isPermissionGrantedFromSettings by viewModel.isPermissionGrantedFromSettings.collectAsState()
+        val galleryUiState by viewModel.galleryUiState.collectAsStateWithLifecycle()
+        val selectedGalleryFolder by viewModel.selectedItemPosition.collectAsStateWithLifecycle()
+        val isPermissionGrantedFromSettings by viewModel.isPermissionGrantedFromSettings.collectAsStateWithLifecycle()
         val navController = rememberNavController()
 
         val permissionLauncher =
-            rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestMultiplePermissions(),
+            rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.RequestMultiplePermissions(),
                 onResult = { permissions ->
                     onRequestResponseReceived(permissions) {
                         navController.navigate(
