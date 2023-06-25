@@ -21,7 +21,7 @@ import com.gallerydemo.R
 import com.gallerydemo.ui.theme.GalleryDemoTheme
 
 @Composable
-fun PermissionComponent(onAllowButtonClick: () -> Unit) {
+fun PermissionScreen(onAllowButtonClick: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -59,14 +59,14 @@ fun PermissionComponent(onAllowButtonClick: () -> Unit) {
 
 @Preview(showBackground = true)
 @Composable
-private fun PermissionComponentPreview() {
+private fun PermissionScreenPreview() {
     GalleryDemoTheme {
         // A surface container using the 'background' color from the theme
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            PermissionComponent {}
+            PermissionScreen {}
         }
     }
 }
