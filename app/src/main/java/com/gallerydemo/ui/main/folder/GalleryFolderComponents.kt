@@ -106,7 +106,6 @@ private fun ProgressBarLoading() {
     }
 }
 
-
 @Composable
 private fun GalleryFolderToolbar(isLinearViewStyle: Boolean, onToggle: () -> Unit) {
     Surface(shadowElevation = dimensionResource(id = R.dimen.toolbar_elevation)) {
