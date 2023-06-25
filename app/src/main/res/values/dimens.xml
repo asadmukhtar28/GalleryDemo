@@ -4,5 +4,8 @@
     <dimen name="permission_block_content_vertical_spacing">16dp</dimen>
     <dimen name="linear_gallery_folder_parent_container_padding">16dp</dimen>
     <dimen name="linear_gallery_folder_thumbnail_size">60dp</dimen>
+    <dimen name="toolbar_padding">16dp</dimen>
+    <dimen name="toolbar_horizontal_views_padding">16dp</dimen>
+    <dimen name="toolbar_elevation">4dp</dimen>
     <dimen name="media_play_icon_size">30dp</dimen>
 </resources>

@@ -31,8 +31,8 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
@@ -73,13 +73,13 @@ fun MediaListScreen(galleryFolder: GalleryFolder = GalleryFolder()) {
 
 @Composable
 private fun MediaListToolbar(title: String = "All Images") {
-    Surface(shadowElevation = 4.dp) {
+    Surface(shadowElevation = dimensionResource(id = R.dimen.toolbar_elevation)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(dimensionResource(id = R.dimen.toolbar_padding)),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.toolbar_horizontal_views_padding)),
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_back),
@@ -89,7 +89,10 @@ private fun MediaListToolbar(title: String = "All Images") {
             )
 
             Text(
-                text = title, style = MaterialTheme.typography.bodyLarge
+                text = title, style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.fillMaxWidth(),
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
             )
         }
     }
