@@ -156,8 +156,7 @@ private fun ItemLinearGalleryFolderView(folder: GalleryFolder, onItemClick: () -
                         top.linkTo(topMarginSpacer.bottom)
                     }
                     .size(dimensionResource(id = R.dimen.linear_gallery_folder_thumbnail_size))
-                    .clip(shape = RoundedCornerShape(8.dp))
-            )
+                    .clip(shape = RoundedCornerShape(8.dp)))
         } ?: kotlin.run {
             Image(painter = painterResource(id = R.drawable.ic_default_thumbnail),
                 contentDescription = stringResource(
@@ -169,8 +168,7 @@ private fun ItemLinearGalleryFolderView(folder: GalleryFolder, onItemClick: () -
                         top.linkTo(topMarginSpacer.bottom)
                     }
                     .size(dimensionResource(id = R.dimen.linear_gallery_folder_thumbnail_size))
-                    .clip(shape = RoundedCornerShape(8.dp))
-            )
+                    .clip(shape = RoundedCornerShape(8.dp)))
         }
 
         Text(
@@ -215,23 +213,29 @@ private fun ItemGridGalleryFolderView(
 
         val mediaItem = folder.mediaList.firstOrNull()
         mediaItem?.let { media ->
-            LoadThumbnail(
-                mediaPath = media.mediaPath,
+            LoadThumbnail(mediaPath = media.mediaPath,
                 isVideo = media.isVideo,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1f)
-            )
+                    .constrainAs(ivThumbnail) {
+                        start.linkTo(parent.start)
+                        top.linkTo(parent.top)
+                        end.linkTo(parent.end)
+                        width = Dimension.fillToConstraints
+                    }
+                    .aspectRatio(1f))
         } ?: kotlin.run {
-            Image(
-                painter = painterResource(id = R.drawable.ic_default_thumbnail),
+            Image(painter = painterResource(id = R.drawable.ic_default_thumbnail),
                 contentDescription = stringResource(
                     id = R.string.thumbnail
                 ),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1f)
-            )
+                    .constrainAs(ivThumbnail) {
+                        start.linkTo(parent.start)
+                        top.linkTo(parent.top)
+                        end.linkTo(parent.end)
+                        width = Dimension.fillToConstraints
+                    }
+                    .aspectRatio(1f))
         }
 
         Box(modifier = Modifier
