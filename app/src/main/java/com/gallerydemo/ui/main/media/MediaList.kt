@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -50,7 +51,8 @@ fun MediaListScreen(galleryFolder: GalleryFolder = GalleryFolder()) {
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding),
-                    columns = GridCells.Fixed(integerResource(id = R.integer.media_grid_span_count))
+                    columns = GridCells.Fixed(integerResource(id = R.integer.media_grid_span_count)),
+                    state = rememberLazyGridState()
                 ) {
                     items(items = galleryFolder.mediaList) { media ->
                         ItemMediaView(media)
