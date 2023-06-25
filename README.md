@@ -13,12 +13,12 @@ GalleryDemo is an Android application that showcases a gallery of images and vid
 
 ## Screenshots
 
-| Permission | Gallery | Media |
-|:---:|:---:|:---:|
-| ![Permission](![permission](https://github.com/asadmukhtar28/GalleryDemo/assets/22379988/1125c696-5520-452d-85dd-fb0b1f193a05)
-) | ![Gallery](![gallery](https://github.com/asadmukhtar28/GalleryDemo/assets/22379988/69e88f19-c7f3-4fae-beaf-5b1cae08a20b)
-) | ![Media](![media](https://github.com/asadmukhtar28/GalleryDemo/assets/22379988/1eafe1f1-ac8c-4e62-a4b9-a3771cd07b22)
-) |
+| Permission |
+![permission](https://github.com/asadmukhtar28/GalleryDemo/assets/22379988/67429a38-1393-46a7-a57d-f2625eaeb3a9)
+| Gallery |
+![gallery](https://github.com/asadmukhtar28/GalleryDemo/assets/22379988/50188fce-4f13-414c-8e06-20146db77780)
+| Media |
+![media](https://github.com/asadmukhtar28/GalleryDemo/assets/22379988/b1f5cc99-b1a0-4faa-8af6-b78d3a9f6971)
 
 ## Tech Stack
 
