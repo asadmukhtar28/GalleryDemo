@@ -34,10 +34,7 @@ class GalleryActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
-
-        if (hasReadStoragePermission()) viewModel.fetchGallery(contentResolver = contentResolver,
-            stringProvider = { resId -> getString(resId) })
-
+        checkPermissionAndMakeCall()
         setContent {
             GalleryDemoTheme {
                 // A surface container using the 'background' color from the theme
@@ -50,13 +47,17 @@ class GalleryActivity : ComponentActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
+    private fun checkPermissionAndMakeCall(isFromOnResume: Boolean = false) {
         if (hasReadStoragePermission()) viewModel.fetchGallery(
             contentResolver = contentResolver,
             stringProvider = { resId -> getString(resId) },
-            isPermissionGrantedFromSettings = true
+            isPermissionGrantedFromSettings = isFromOnResume
         )
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkPermissionAndMakeCall(true)
     }
 
     @Composable

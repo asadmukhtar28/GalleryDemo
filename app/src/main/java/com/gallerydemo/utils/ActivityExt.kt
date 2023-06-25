@@ -1,6 +1,5 @@
 package com.gallerydemo.utils
 
-import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
@@ -11,18 +10,6 @@ import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import com.gallerydemo.R
 
-
-private fun isGranularPermissionsSupport() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-
-fun getPermissionList() = if (isGranularPermissionsSupport()) {
-    arrayOf(
-        Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO
-    )
-} else {
-    arrayOf(
-        Manifest.permission.READ_EXTERNAL_STORAGE
-    )
-}
 
 fun Activity.hasReadStoragePermission(): Boolean {
     return getPermissionList().any {
@@ -41,15 +28,18 @@ fun Activity.openPermissionSettings() {
 }
 
 fun Activity.showPermissionSettingsConfirmationDialog() {
-    val alertDialog: AlertDialog.Builder =
-        AlertDialog.Builder(this).setTitle(getString(R.string.app_name))
-            .setMessage(getString(R.string.message_open_permissions_setting))
-            .setPositiveButton(R.string.settings) { dialog, _ ->
-                openPermissionSettings()
-                dialog.dismiss()
-            }.setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
-    alertDialog.setCancelable(false)
-    alertDialog.show()
+    AlertDialog.Builder(this).apply {
+        setTitle(getString(R.string.app_name))
+        setMessage(getString(R.string.message_open_permissions_setting))
+        setPositiveButton(R.string.settings) { dialog, _ ->
+            openPermissionSettings()
+            dialog.dismiss()
+        }
+        setNegativeButton(R.string.cancel) { dialog, _ ->
+            dialog.dismiss()
+        }
+        setCancelable(false)
+    }.create().show()
 }
 
 fun Activity.isNeverAskPermissionSet(permission: String) =
