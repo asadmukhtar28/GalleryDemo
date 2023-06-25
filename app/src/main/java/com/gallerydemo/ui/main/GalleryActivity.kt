@@ -19,7 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.gallerydemo.ui.main.folder.GalleryFolderScreen
 import com.gallerydemo.ui.main.media.MediaListScreen
-import com.gallerydemo.ui.main.permission.PermissionComponent
+import com.gallerydemo.ui.main.permission.PermissionScreen
 import com.gallerydemo.ui.theme.GalleryDemoTheme
 import com.gallerydemo.utils.PermissionHelper
 import com.gallerydemo.utils.hasReadStoragePermission
@@ -86,7 +86,7 @@ class GalleryActivity : ComponentActivity() {
             startDestination = if (isReadStoragePermissionGranted) NavRoutes.FOLDERS_SCREEN else NavRoutes.PERMISSION_SCREEN
         ) {
             composable(NavRoutes.PERMISSION_SCREEN) {
-                PermissionComponent {
+                PermissionScreen {
                     permissionLauncher.launch(PermissionHelper.getPermissionList())
                 }
             }

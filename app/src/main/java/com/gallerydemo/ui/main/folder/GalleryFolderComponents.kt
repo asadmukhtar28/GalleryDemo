@@ -146,14 +146,17 @@ private fun ItemLinearGalleryFolderView(folder: GalleryFolder, onItemClick: () -
             }
             .height(dimensionResource(id = R.dimen.linear_gallery_folder_view_top_spacing)))
 
-        LoadThumbnail(mediaPath = folder.mediaList.firstOrNull()?.mediaPath ?: "",
-            isVideo = folder.mediaList.firstOrNull()?.isVideo ?: false, modifier = Modifier
-                .constrainAs(ivThumbnail) {
-                    start.linkTo(parent.start)
-                    top.linkTo(topMarginSpacer.bottom)
-                }
-                .size(dimensionResource(id = R.dimen.linear_gallery_folder_thumbnail_size))
-                .clip(shape = RoundedCornerShape(8.dp)))
+        val mediaItem = folder.mediaList.firstOrNull()
+        mediaItem?.let { media ->
+            LoadThumbnail(mediaPath = media.mediaPath,
+                isVideo = media.isVideo, modifier = Modifier
+                    .constrainAs(ivThumbnail) {
+                        start.linkTo(parent.start)
+                        top.linkTo(topMarginSpacer.bottom)
+                    }
+                    .size(dimensionResource(id = R.dimen.linear_gallery_folder_thumbnail_size))
+                    .clip(shape = RoundedCornerShape(8.dp)))
+        }
 
         Text(
             text = folder.title ?: "",
@@ -194,12 +197,15 @@ private fun ItemGridGalleryFolderView(
         .clickable { onItemClick() }) {
         val (ivThumbnail, folderName, mediaCount, gradientView) = createRefs()
 
-        LoadThumbnail(
-            mediaPath = folder.mediaList.firstOrNull()?.mediaPath ?: "",
-            isVideo = folder.mediaList.firstOrNull()?.isVideo ?: false, modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(1f)
-        )
+        val mediaItem = folder.mediaList.firstOrNull()
+        mediaItem?.let { media ->
+            LoadThumbnail(
+                mediaPath = media.mediaPath,
+                isVideo = media.isVideo, modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f)
+            )
+        }
 
         Box(modifier = Modifier
             .constrainAs(gradientView) {
