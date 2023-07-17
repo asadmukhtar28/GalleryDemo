@@ -74,7 +74,11 @@ class GalleryActivity : ComponentActivity() {
                     onRequestResponseReceived(permissions) {
                         navController.navigate(
                             NavRoutes.FOLDERS_SCREEN,
-                        )
+                        ) {
+                            popUpTo(NavRoutes.PERMISSION_SCREEN) {
+                                inclusive = true
+                            }
+                        }
                         viewModel.fetchGallery(contentResolver, stringProvider = { resId ->
                             getString(resId)
                         })
@@ -110,7 +114,11 @@ class GalleryActivity : ComponentActivity() {
         if (isPermissionGrantedFromSettings) {
             navController.navigate(
                 NavRoutes.FOLDERS_SCREEN,
-            )
+            ) {
+                popUpTo(NavRoutes.PERMISSION_SCREEN) {
+                    inclusive = true
+                }
+            }
         }
     }
 
