@@ -43,7 +43,8 @@ import com.gallerydemo.ui.theme.GalleryDemoTheme
 @Composable
 fun MediaListScreen(
     galleryFolder: GalleryFolder = GalleryFolder(),
-    onBackIconClick: (() -> Unit)? = null
+    onBackIconClick: (() -> Unit)? = null,
+    onMediaItemClick: ((media: MediaItem) -> Unit)? = null
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -63,7 +64,9 @@ fun MediaListScreen(
                     state = rememberLazyGridState()
                 ) {
                     items(items = galleryFolder.mediaList) { media ->
-                        ItemMediaView(media)
+                        ItemMediaView(media, onMediaItemClick = {
+                            onMediaItemClick?.invoke(media)
+                        })
                     }
                 }
             }
@@ -104,14 +107,16 @@ private fun MediaListToolbar(
 }
 
 @Composable
-fun ItemMediaView(media: MediaItem) {
-
+fun ItemMediaView(media: MediaItem, onMediaItemClick: (media: MediaItem) -> Unit) {
     Box(modifier = Modifier.fillMaxWidth()) {
         LoadThumbnail(
             mediaPath = media.mediaPath,
             isVideo = media.isVideo, modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f)
+                .clickable {
+                    onMediaItemClick.invoke(media)
+                }
         )
 
         if (media.isVideo) {
