@@ -57,7 +57,10 @@ fun EmptyComponent() {
 }
 
 @Composable
-fun LoadThumbnail(mediaPath: String, isVideo: Boolean, modifier: Modifier = Modifier) {
+fun LoadThumbnail(
+    mediaPath: String, isVideo: Boolean, modifier: Modifier = Modifier,
+    contentScale: ContentScale = ContentScale.Crop
+) {
     val context = LocalContext.current
     if (isVideo) {
         val imageLoader = remember {
@@ -75,14 +78,14 @@ fun LoadThumbnail(mediaPath: String, isVideo: Boolean, modifier: Modifier = Modi
                 painter = painterResource(id = R.drawable.ic_default_thumbnail),
                 contentDescription = null,
                 modifier = modifier,
-                contentScale = ContentScale.Crop,
+                contentScale = contentScale,
             )
         }
 
         Image(
             painter = painter,
             contentDescription = stringResource(id = R.string.thumbnail),
-            contentScale = ContentScale.Crop,
+            contentScale = contentScale,
             modifier = modifier
         )
     } else {
@@ -90,7 +93,7 @@ fun LoadThumbnail(mediaPath: String, isVideo: Boolean, modifier: Modifier = Modi
             model = mediaPath,
             contentDescription = stringResource(id = R.string.thumbnail),
             modifier = modifier,
-            contentScale = ContentScale.Crop,
+            contentScale = contentScale,
             placeholder = painterResource(id = R.drawable.ic_default_thumbnail),
             error = painterResource(id = R.drawable.ic_default_thumbnail)
         )
