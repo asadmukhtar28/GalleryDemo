@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gallerydemo.data.local.models.GalleryFolder
+import com.gallerydemo.data.local.models.MediaItem
 import com.gallerydemo.data.repository.GalleryRepository
 import com.gallerydemo.ui.main.folder.GalleryFolderUiState
 import com.gallerydemo.utils.State
@@ -29,6 +30,8 @@ class GalleryActivityViewModel @Inject constructor(private val repository: Galle
     private val _isPermissionGrantedFromSettings = MutableStateFlow(false)
     val isPermissionGrantedFromSettings = _isPermissionGrantedFromSettings.asStateFlow()
 
+    private val _selectedMedia = MutableStateFlow(MediaItem())
+    val selectedMedia = _selectedMedia.asStateFlow()
 
     /**
      * As onConfiguration change fetchGallery() again called so before loading the data
@@ -87,5 +90,9 @@ class GalleryActivityViewModel @Inject constructor(private val repository: Galle
 
     fun setSelectedGalleryFolderItem(folder: GalleryFolder) {
         _selectedItemPosition.value = folder
+    }
+
+    fun setSelectedMediaItem(mediaItem: MediaItem) {
+        _selectedMedia.value = mediaItem
     }
 }

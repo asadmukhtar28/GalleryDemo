@@ -20,6 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import com.gallerydemo.ui.main.folder.GalleryFolderScreen
 import com.gallerydemo.ui.main.media.MediaListScreen
 import com.gallerydemo.ui.main.permission.PermissionScreen
+import com.gallerydemo.ui.main.preview.MediaPreviewScreen
 import com.gallerydemo.ui.theme.GalleryDemoTheme
 import com.gallerydemo.utils.PermissionHelper
 import com.gallerydemo.utils.hasReadStoragePermission
@@ -65,6 +66,7 @@ class GalleryActivity : ComponentActivity() {
         val galleryUiState by viewModel.galleryUiState.collectAsStateWithLifecycle()
         val selectedGalleryFolder by viewModel.selectedItemPosition.collectAsStateWithLifecycle()
         val isPermissionGrantedFromSettings by viewModel.isPermissionGrantedFromSettings.collectAsStateWithLifecycle()
+        val selectedMedia by viewModel.selectedMedia.collectAsStateWithLifecycle()
         val navController = rememberNavController()
 
         val permissionLauncher =
@@ -105,9 +107,18 @@ class GalleryActivity : ComponentActivity() {
             }
 
             composable(NavRoutes.MEDIA_SCREEN) {
-                MediaListScreen(selectedGalleryFolder) {
+                MediaListScreen(selectedGalleryFolder, onBackIconClick = {
                     navController.popBackStack()
+                }) { mediaItem ->
+                    viewModel.setSelectedMediaItem(mediaItem)
+                    navController.navigate(NavRoutes.MEDIA_PREVIEW_SCREEN)
                 }
+            }
+            composable(NavRoutes.MEDIA_PREVIEW_SCREEN) {
+                MediaPreviewScreen(
+                    selectedMedia,
+                    onBackClick = { navController.popBackStack() },
+                    onEditClick = {})
             }
         }
 

@@ -4,4 +4,5 @@ object NavRoutes {
     const val PERMISSION_SCREEN = "PERMISSION_SCREEN"
     const val FOLDERS_SCREEN = "FOLDERS_SCREEN"
     const val MEDIA_SCREEN = "MEDIA_SCREEN"
+    const val MEDIA_PREVIEW_SCREEN = "MEDIA_PREVIEW_SCREEN"
 }
